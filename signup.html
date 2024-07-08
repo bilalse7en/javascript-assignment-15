@@ -49,7 +49,7 @@
             </div>
         </div>
     </div>
-
+    
     <!-- Login form, initially hidden -->
     <div id="loginFormContainer" class="container mt-5 d-none">
         <div class="row justify-content-center">
@@ -88,77 +88,84 @@
         crossorigin="anonymous"></script>
     <!-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script> -->
-    <script>
+      <script>
         document.addEventListener('DOMContentLoaded', function() {
-    // Show login form and hide signup form initially
-    document.getElementById('loginFormContainer').classList.add('d-none');
-    document.getElementById('signupFormContainer').classList.remove('d-none');
+            // Show login form and hide signup form initially
+            document.getElementById('loginFormContainer').classList.add('d-none');
+            document.getElementById('signupFormContainer').classList.remove('d-none');
     
-    // Handle click on "Already a user? Login here."
-    document.getElementById('loginLink').addEventListener('click', function(event) {
-        event.preventDefault();
-        document.getElementById('signupFormContainer').classList.add('d-none');
-        document.getElementById('loginFormContainer').classList.remove('d-none');
-    });
-
-    // Handle click on "Not registered? Sign Up here."
-    document.getElementById('signupLink').addEventListener('click', function(event) {
-        event.preventDefault();
-        document.getElementById('loginFormContainer').classList.add('d-none');
-        document.getElementById('signupFormContainer').classList.remove('d-none');
-    });
-
-    // Handle signup form submission
-    document.getElementById('signupForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        let username = document.getElementById('username').value;
-        let email = document.getElementById('email').value;
-        let password = document.getElementById('password').value;
-
-        if (!username || !email || !password) {
-            // Show error message
-            document.getElementById('signupError').classList.remove('d-none');
-            return;
-        }
-
-        // Store user data in local storage (for demonstration purposes)
-        let user = {
-            username: username,
-            email: email,
-            password: password
-        };
-        localStorage.setItem('currentUser', JSON.stringify(user));
-
-        // Hide signup form and show login form
-        document.getElementById('signupFormContainer').classList.add('d-none');
-        document.getElementById('loginFormContainer').classList.remove('d-none');
-    });
-
-    // Handle login form submission
-    document.getElementById('loginForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        let username = document.getElementById('loginUsername').value;
-        let password = document.getElementById('loginPassword').value;
-
-        console.log('Login attempt with Username:', username);
-        console.log('Password:', password);
-
-        // Replace with actual validation logic or remove for testing any credentials
-        // Here, I'm just checking if the entered username and password are non-empty
-        if (username && password) {
-            // Redirect or handle logged-in state (e.g., redirect to main page)
-            console.log('Login successful!');
-            window.location.href = 'index.html'; // Redirect to index.html after successful login
-        } else {
-            // Show error message for incorrect credentials
-            console.log('Login failed for Username:', username);
-            document.getElementById('loginError').innerHTML = 'Invalid username or password. Please try again.';
-            document.getElementById('loginError').classList.remove('d-none');
-        }
-    });
-});
+            // Handle click on "Already a user? Login here."
+            document.getElementById('loginLink').addEventListener('click', function(event) {
+                event.preventDefault();
+                document.getElementById('signupFormContainer').classList.add('d-none');
+                document.getElementById('loginFormContainer').classList.remove('d-none');
+            });
+    
+            // Handle click on "Not registered? Sign Up here."
+            document.getElementById('signupLink').addEventListener('click', function(event) {
+                event.preventDefault();
+                document.getElementById('loginFormContainer').classList.add('d-none');
+                document.getElementById('signupFormContainer').classList.remove('d-none');
+            });
+    
+            // Handle signup form submission
+            document.getElementById('signupForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+    
+                let username = document.getElementById('username').value;
+                let email = document.getElementById('email').value;
+                let password = document.getElementById('password').value;
+    
+                if (!username || !email || !password) {
+                    // Show error message
+                    document.getElementById('signupError').classList.remove('d-none');
+                    return;
+                }
+    
+                // Save user data in local storage
+                let user = {
+                    username: username,
+                    email: email,
+                    password: password
+                };
+                localStorage.setItem(username, JSON.stringify(user));
+    
+                // Clear fields
+                document.getElementById('username').value = '';
+                document.getElementById('email').value = '';
+                document.getElementById('password').value = '';
+    
+                // Hide signup form and show login form
+                document.getElementById('signupFormContainer').classList.add('d-none');
+                document.getElementById('loginFormContainer').classList.remove('d-none');
+            });
+    
+            // Handle login form submission
+            document.getElementById('loginForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+    
+                let username = document.getElementById('loginUsername').value;
+                let password = document.getElementById('loginPassword').value;
+    
+                let storedUser = localStorage.getItem(username);
+    
+                if (storedUser) {
+                    let user = JSON.parse(storedUser);
+                    if (user.password === password) {
+                        // Successful login
+                        window.location.href = 'index.html';
+                    } else {
+                        // Show error message for incorrect password
+                        document.getElementById('loginError').innerHTML = 'Invalid username or password. Please try again.';
+                        document.getElementById('loginError').classList.remove('d-none');
+                    }
+                } else {
+                    // Show error message for non-existent username
+                    document.getElementById('loginError').innerHTML = 'Invalid username or password. Please try again.';
+                    document.getElementById('loginError').classList.remove('d-none');
+                }
+            });
+        });
     </script>
 </body>
 
